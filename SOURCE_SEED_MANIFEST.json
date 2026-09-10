@@ -1,0 +1,221 @@
+{
+  "file_count": 42,
+  "files": [
+    {
+      "bytes": 111,
+      "path": ".gitattributes",
+      "sha256": "e5676b2c8c313f8bcc0240e80d3c868678bd8f43558c3584e9be64b40e84f670"
+    },
+    {
+      "bytes": 652,
+      "path": ".gitignore",
+      "sha256": "d8cc2d1fdd97f976ec37e3879b12119cd7fb32d7d26779d1612953699d6bb0e7"
+    },
+    {
+      "bytes": 1068,
+      "path": "AUTHORITY/G101_AUTHORITY_POINTERS.json",
+      "sha256": "054a20b31d49ab7cb4e8270ac394aba860651c05129321f553b6fc7987d5c349"
+    },
+    {
+      "bytes": 1354,
+      "path": "AUTHORITY.md",
+      "sha256": "ed1557e227d49c17e66b72dbe7114da0b5c9b3231fe6833bb88059dd8ac8f84b"
+    },
+    {
+      "bytes": 121,
+      "path": "PLAN_G101/PLAN_INTERNAL_IDENTITY.json",
+      "sha256": "6b7274a7ba9952ecbfc30fc985dc767c864ba019dc0a4a8d8f4b1ee929a20891"
+    },
+    {
+      "bytes": 1761,
+      "path": "README.md",
+      "sha256": "722fc2c72b804aa5cdefee5b992097451ea5c11ca757c83de79aa7f3ce1aeb76"
+    },
+    {
+      "bytes": 1647,
+      "path": "RUN_DF_G101_SCALE1K.bat",
+      "sha256": "265646e543b20d13f3c6acb06de33e0e62fd8862d352fd7fbd7d40c0e3a82652"
+    },
+    {
+      "bytes": 10303,
+      "path": "RUN_DF_G101_SCALE1K_GUARDIAN.ps1",
+      "sha256": "1eb8d49f875fffcd5ae01ce55fdab09c44213389981193936b565ec68f1cd95b"
+    },
+    {
+      "bytes": 6527,
+      "path": "SOURCE/pcs_factory_appearance.py",
+      "sha256": "d04db4526da1666930502394d6e83f2d6f9f6e9a4da72810b334b2a9f09362a4"
+    },
+    {
+      "bytes": 11138,
+      "path": "SOURCE/pcs_factory_assets.py",
+      "sha256": "bc66c059116dd82924fdc72e3448cefb49c3706d8987ea0a8ca20587df1de350"
+    },
+    {
+      "bytes": 21133,
+      "path": "SOURCE/pcs_factory_blender_controller.py",
+      "sha256": "6a577c811f1204f2c48a86f3e9bc387134aeef5bb50f1dede4c33d7ac8e051f0"
+    },
+    {
+      "bytes": 6923,
+      "path": "SOURCE/pcs_factory_blender_gallery.py",
+      "sha256": "f673dd365076982f87bd3e235aaf3c493b41fee35b2896424d01be6318542485"
+    },
+    {
+      "bytes": 13580,
+      "path": "SOURCE/pcs_factory_blender_protocol.py",
+      "sha256": "4b22b22f8350a7c56a71cfeb54430760124d00511dd73fea06b3fe8d6abf53a4"
+    },
+    {
+      "bytes": 37416,
+      "path": "SOURCE/pcs_factory_blender_runtime.py",
+      "sha256": "54198c130bd630c162af45a774c355362f849da5409d0aaa4dd6b35552aaf4c4"
+    },
+    {
+      "bytes": 43034,
+      "path": "SOURCE/pcs_factory_blender_worker.py",
+      "sha256": "548f33e8821df9a3de3dd0feaf4c197d29d319ba335260cd45cf0ba37cf91349"
+    },
+    {
+      "bytes": 4337,
+      "path": "SOURCE/pcs_factory_blueprint_g101_r2.py",
+      "sha256": "17e727e7a951b82fd971ba72fc892447aba0e6ef9030b34d96dcb7b6e505dda5"
+    },
+    {
+      "bytes": 5497,
+      "path": "SOURCE/pcs_factory_blueprint_r33.py",
+      "sha256": "8f3daee320994e79c58747309965428f855d82306b3b93372af58d5be9f02fb4"
+    },
+    {
+      "bytes": 5860,
+      "path": "SOURCE/pcs_factory_blueprint_r36.py",
+      "sha256": "e44d3c08788de709e989b9a0dbc6a66a143add1fa54802316a84b80c9a3fdb44"
+    },
+    {
+      "bytes": 8957,
+      "path": "SOURCE/pcs_factory_bootstrap.py",
+      "sha256": "61540de8d67ba2d472cda217b83ee3efcb9ac8c21cd8f6c0566fcdedbf565604"
+    },
+    {
+      "bytes": 7615,
+      "path": "SOURCE/pcs_factory_camera.py",
+      "sha256": "51d131462363c7f6fafa35b3b6ecca257239d920b11aeb292221b2c6c2c41f85"
+    },
+    {
+      "bytes": 21750,
+      "path": "SOURCE/pcs_factory_camera_observability_v2.py",
+      "sha256": "be3ee5c3e228807f7ff58663126c60ae51c00a624240cf0a753f55079d97b83d"
+    },
+    {
+      "bytes": 1525,
+      "path": "SOURCE/pcs_factory_coordinates.py",
+      "sha256": "660ab277d389df4a9831013f78c12b728110192b27d44c6091b2f6f15e82747f"
+    },
+    {
+      "bytes": 19472,
+      "path": "SOURCE/pcs_factory_maya_parity.py",
+      "sha256": "fba88cfc5e2a029789e29c46aa01a9034c2037217604e432c43bbfc458b93167"
+    },
+    {
+      "bytes": 91257,
+      "path": "SOURCE/pcs_factory_micro100_gt.py",
+      "sha256": "221c2c913a8de8189a005a7ccf336bb5fd9804f55634acd1c4ec4891838579b9"
+    },
+    {
+      "bytes": 3615,
+      "path": "SOURCE/pcs_factory_oracle.py",
+      "sha256": "f4e8ecf8d4051b67af0f08124c757fa6eb3c56517dd03eafa7a693d208a8d211"
+    },
+    {
+      "bytes": 3804,
+      "path": "SOURCE/pcs_factory_paths.py",
+      "sha256": "e4ef277112460d33e15118360ccfe346de6a54b3bf2176df5f0170694bb345cc"
+    },
+    {
+      "bytes": 241,
+      "path": "SOURCE/pcs_factory_qualification.py",
+      "sha256": "5028fca07cb9a52a50f2f29b355dd9a6816650cf06487230b8437a9dd6b76597"
+    },
+    {
+      "bytes": 1700,
+      "path": "SOURCE/pcs_factory_reprojection_r14.py",
+      "sha256": "e05fc7191536cb58200e399802e9df38546f9941bcdb32a161b1f65892041473"
+    },
+    {
+      "bytes": 8413,
+      "path": "SOURCE/pcs_factory_rgb8.py",
+      "sha256": "36a1ee8fc50e26fdeca3222ee133292795ef31f94c25063420c6cc46eb482b88"
+    },
+    {
+      "bytes": 3475,
+      "path": "SOURCE/pcs_factory_rgb_rescue_r23.py",
+      "sha256": "4c57158b3c7dbf57b46471d8f9c33db021ee3433e12277b36d6bd2390e017cd5"
+    },
+    {
+      "bytes": 3149,
+      "path": "SOURCE/pcs_factory_run_journal.py",
+      "sha256": "6bbcc18ff12d8c353334bee3f5adbf19a206f2805080a367b8de3b8e3e7e077b"
+    },
+    {
+      "bytes": 11895,
+      "path": "SOURCE/pcs_factory_scene_recipe.py",
+      "sha256": "0e88f2d85dc938b5f08fa82339556f3df97b0530ac90f5e2e95b55cde8bda071"
+    },
+    {
+      "bytes": 3621,
+      "path": "SOURCE/pcs_factory_scene_truth.py",
+      "sha256": "c433530f7bf61ed27878a8e3b2f7d06333bf7287e28f511cf85a18987fd36f06"
+    },
+    {
+      "bytes": 2047,
+      "path": "SOURCE/pcs_factory_seed.py",
+      "sha256": "6fe0f695899834cb5802c42ac36dd0949fc02e3028072c9fd2d35b0a3d46fad4"
+    },
+    {
+      "bytes": 2555,
+      "path": "SOURCE/pcs_factory_visibility_r15.py",
+      "sha256": "c729733dbd611fa9e91a57488b62ed2971318cac52eb3aa8b952b4ac19f324fd"
+    },
+    {
+      "bytes": 1049,
+      "path": "SOURCE/pcs_factory_visibility_r17.py",
+      "sha256": "9a582c9b932ab8b9cb9dd55c7fc8001535be869330037008c044ea873aba5847"
+    },
+    {
+      "bytes": 266,
+      "path": "SPECS/DF_G101_R2_SPEC_POINTER.txt",
+      "sha256": "09664df7b3af1f8702e624b3c00e621e5b54b44ab7822e5932fabe52d02ad4fc"
+    },
+    {
+      "bytes": 152,
+      "path": "SPECS/DF_G101_SCALE1K_V1_SPEC_POINTER.txt",
+      "sha256": "47d0c686b7fb2f0a5e6a821c078707416ae53cdbbc6a0a24d590572c47d231dc"
+    },
+    {
+      "bytes": 169,
+      "path": "SPECS/DF_G101_SCALE1K_V1_SPLIT_CLARIFICATION_POINTER.txt",
+      "sha256": "c29e52aca9cd9ac11ef9a43511b7eea65a26da19d6def2300ba266c08d3ec4b8"
+    },
+    {
+      "bytes": 3224,
+      "path": "df_g101_focused_selftest.py",
+      "sha256": "78d395861a80f890fa305076d97cd77946e18840f67e721f2236b8dcf2fe43c5"
+    },
+    {
+      "bytes": 446843,
+      "path": "df_g101_scale1k.py",
+      "sha256": "426e86d3a4dccd0757c1c7a16786b74ec44776ed0518ef8a5b76c6121e4f23e1"
+    },
+    {
+      "bytes": 2778,
+      "path": "docs/BASELINE_G101_R2_RELEASE_README.md",
+      "sha256": "892ecb4230f67505e899418677cac0e532a1b019e0db47182633808973452360"
+    }
+  ],
+  "generated_date": "2026-09-10",
+  "manifest_scope": "all REPO_PAYLOAD files except SOURCE_SEED_MANIFEST.json itself",
+  "repo": "ricmarquesart/PCS_CAMERA_GEOMETRY_DATA_FACTORY",
+  "schema": "PCS_DF_GITHUB_SOURCE_SEED_MANIFEST_V1",
+  "source_release_drive_id": "1oNv-3_czx1Yzi6pauqh-9yOTjX8OfCTQ",
+  "source_release_sha256": "f4488e64137634991ae9dc3c9fd0be6a8e1175f3aca57cca8217e1602df59f52"
+}

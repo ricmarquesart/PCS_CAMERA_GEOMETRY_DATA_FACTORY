@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Production/generated Data Factory data
+09_RUNS/
+RUNS/
+USER_SANDBOX/
+DATASETS/
+datasets/
+renders/
+cache/
+CACHE/
+*.exr
+*.blend
+*.blend1
+*.ma
+*.mb
+
+# Evidence / transport artifacts
+*RETURN*.zip
+*FAILURE_RETURN*.zip
+*EVIDENCE_BUNDLE*.zip
+*.7z
+*.rar
+
+# Release/package payloads stay in Google Drive
+*.zip
+
+# Secrets/local configuration
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+
+# Other PCS project lines are not part of this repository
+C_RADIO/
+C-RADIO/
+CRADIO/
+C_HUB/
+C-HUB/
+CHUB/
+SPECIALISTS/

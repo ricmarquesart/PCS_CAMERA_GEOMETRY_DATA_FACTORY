@@ -1,0 +1,19 @@
+{
+  "closed_micro100_return_drive_id": "12VDhJRmvu105VHRplr2I2LtGeGwVcQdV",
+  "closed_micro100_return_sha256": "f94476c926bb7ba6e13e5122031dc25649e1f8277d4440bb0471ce946e57dee6",
+  "g101_plan_projection_drive_id": "1ckmS4FqlotDWjS63C8RTt-rno6LYV93G",
+  "g101_plan_projection_sha256": "746e402b2468cb84a3607aba505bb1e7e49a4b2ae837dca7e9008392d3278141",
+  "g101_spec_drive_id": "1IZJXzH2JvzaO-9ASoh3AhZHIfM5uUVbWPnFuyXtK3J8",
+  "g101_split_clarification_drive_id": "1bhSosigUnCti5igEFn8ore-5lVfqbNvwKlP5AyUCAkE",
+  "maya_mutated": false,
+  "parent_r36_package_drive_id": "1b3fY8M32KRsslaThRDsEnGO2GJEk12Ur",
+  "parent_r36_package_sha256": "63d4a625cbac8df250b9c038751e1bf72ae9f86e00b77df4b867f1d5b1ccde0b",
+  "product_mutated": false,
+  "r37_closure_record_drive_id": "1a63qacKbvG_OKUwGzPCoBXIk5WxmZiauKBXQiBstNJs",
+  "r37_machine_audit_drive_id": "1nYkPR44ImNPKb7s1nRUUTJLXAtXxSA9t",
+  "real_1k_execution_authorized": false,
+  "scale_10k_authorized": false,
+  "schema": "DF-G101-PACKAGE-AUTHORITY-POINTERS-V1",
+  "test77_accessed": false,
+  "training_started": false
+}
