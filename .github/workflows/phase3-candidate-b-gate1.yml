@@ -1,0 +1,99 @@
+name: Phase3 Candidate B Gate1 Full Domain
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'qualification/phase3/**'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-gate1.yml'
+  pull_request:
+    paths:
+      - 'qualification/phase3/**'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-gate1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  anchors:
+    name: Direct-vs-optimized anchors (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Compile Phase 3 qualification code
+        run: python -m py_compile qualification/phase3/candidate_b_reference.py qualification/phase3/candidate_b_optimized.py qualification/phase3/candidate_b_direct_oracle.py qualification/phase3/synthetic_cases.py qualification/phase3/test_candidate_b_gate1.py qualification/phase3/test_phase3_static_firewall.py
+      - name: Static firewall and Depth isolation
+        run: python qualification/phase3/test_phase3_static_firewall.py
+      - name: Full-domain direct-vs-optimized anchors
+        run: python qualification/phase3/test_candidate_b_gate1.py
+      - name: PR source-scope audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          bad=0
+          while IFS= read -r p; do
+            case "$p" in
+              SOURCE/pcs_factory_micro100_gt.py|qualification/phase3/*|qualification/runtime_logging/*|TOOLS/*|.github/workflows/*) ;;
+              *) echo "UNAUTHORIZED_PHASE3_PATH: $p"; bad=1 ;;
+            esac
+          done < <(git diff --name-only origin/main...HEAD)
+          test "$bad" -eq 0
+
+  matrix:
+    name: ${{ matrix.suite }} / ${{ matrix.orientation }} / ${{ matrix.mode }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [standard, ultrathin, phase]
+        orientation: [VERTICAL, DIAGONAL, HORIZONTAL]
+        mode: [visible, occluded]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Run Candidate B matrix shard
+        run: python qualification/phase3/run_candidate_b_matrix.py --suite "${{ matrix.suite }}" --orientation "${{ matrix.orientation }}" --mode "${{ matrix.mode }}" --out matrix_result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: candidate-b-${{ matrix.suite }}-${{ matrix.orientation }}-${{ matrix.mode }}
+          path: matrix_result.json
+          if-no-files-found: error
+          retention-days: 14
+
+  specials:
+    name: Synthetic special controls
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Run special controls
+        run: python qualification/phase3/run_candidate_b_matrix.py --suite special --out special_result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: candidate-b-special-controls
+          path: special_result.json
+          if-no-files-found: error
+          retention-days: 14
