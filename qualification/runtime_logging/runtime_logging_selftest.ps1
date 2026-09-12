@@ -73,7 +73,7 @@ try {
     $missingRoot = Join-Path $root 'DOES_NOT_EXIST'
     $marker = Join-Path $root 'governed_action_marker.txt'
     $blockCmd = Join-Path $root 'must_not_run.cmd'
-    $blockContent = "@echo invoked>\"$marker\"`r`n@exit /b 0`r`n"
+    $blockContent = ('@echo invoked>"{0}"' -f $marker) + "`r`n@exit /b 0`r`n"
     [System.IO.File]::WriteAllText($blockCmd, $blockContent, [System.Text.UTF8Encoding]::new($false))
     $rc3 = Invoke-WrapperChild @('-GateId','MISSING_SINK_TEST','-ToolId','SELFTEST_V1','-CommandPath',$blockCmd,'-LogRoot',$missingRoot)
     Assert-True ($rc3 -eq 4) ('missing sink wrapper exit=' + $rc3)
