@@ -10,9 +10,9 @@ function Assert-True([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw "ASSERTION_FAILED:$Message" }
 }
 
-function Invoke-WrapperChild([string[]]$Args) {
+function Invoke-WrapperChild([string[]]$Arguments) {
     $hostExe = [System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName
-    & $hostExe -NoProfile -ExecutionPolicy Bypass -File $wrapper @Args
+    & $hostExe -NoProfile -ExecutionPolicy Bypass -File $wrapper @Arguments
     return [int]$LASTEXITCODE
 }
 
