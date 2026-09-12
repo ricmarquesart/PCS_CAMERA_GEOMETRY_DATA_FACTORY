@@ -85,6 +85,7 @@ try {
     finally { Remove-Item Env:PCS_RUNTIME_LOG_ROOT -ErrorAction SilentlyContinue }
 
     Write-Host 'PCS RUNTIME LOGGING SELFTEST: PASS'
+    exit 0
 }
 finally {
     Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
