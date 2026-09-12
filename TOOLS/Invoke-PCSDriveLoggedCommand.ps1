@@ -35,13 +35,23 @@ try {
         exit 4
     }
 
-    # Streams are intentionally merged for live operator visibility. STDERR.log records
-    # that contract explicitly; RESULT.json remains the machine authority for status.
+    # Streams are intentionally merged for live operator visibility. Windows
+    # PowerShell 5.1 surfaces native stderr as non-terminating ErrorRecords when
+    # redirected into the success stream, so EAP is temporarily Continue only
+    # around the one native invocation. The native process exit code remains the
+    # governed status authority; this does not permit retry or mask a nonzero exit.
     [System.IO.File]::WriteAllText($stderrPath, "MERGED_INTO_STDOUT.log`r`n", [System.Text.UTF8Encoding]::new($false))
     $governedInvoked = $true
     Write-Host ('Invoking exactly once: ' + $CommandPath)
-    & $CommandPath @CommandArgs 2>&1 | Tee-Object -FilePath $stdoutPath
-    $commandExit = if ($null -eq $LASTEXITCODE) { 0 } else { [int]$LASTEXITCODE }
+    $savedEap = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        & $CommandPath @CommandArgs 2>&1 | Tee-Object -FilePath $stdoutPath
+        $commandExit = if ($null -eq $LASTEXITCODE) { 0 } else { [int]$LASTEXITCODE }
+    }
+    finally {
+        $ErrorActionPreference = $savedEap
+    }
 
     $copyErrors = @()
     foreach ($p in @($ReturnPath)) {
