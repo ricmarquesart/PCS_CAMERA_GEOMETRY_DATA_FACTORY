@@ -6,13 +6,15 @@ on:
       - phase3/g101-candidate-b-drive-logging
     paths:
       - 'qualification/phase3/test_candidate_b_target0034_archived.py'
-      - 'qualification/phase3/fixtures/g101_target0034_capsule_v1.b64'
+      - 'qualification/phase3/test_candidate_b_target0034_archived_chunked.py'
+      - 'qualification/phase3/fixtures/g101_target0034_capsule_v1.part*'
       - 'SOURCE/pcs_factory_micro100_gt.py'
       - '.github/workflows/phase3-candidate-b-target0034-archived.yml'
   pull_request:
     paths:
       - 'qualification/phase3/test_candidate_b_target0034_archived.py'
-      - 'qualification/phase3/fixtures/g101_target0034_capsule_v1.b64'
+      - 'qualification/phase3/test_candidate_b_target0034_archived_chunked.py'
+      - 'qualification/phase3/fixtures/g101_target0034_capsule_v1.part*'
       - 'SOURCE/pcs_factory_micro100_gt.py'
       - '.github/workflows/phase3-candidate-b-target0034-archived.yml'
 
@@ -42,6 +44,7 @@ jobs:
           python -m py_compile
           SOURCE/pcs_factory_micro100_gt.py
           qualification/phase3/test_candidate_b_target0034_archived.py
+          qualification/phase3/test_candidate_b_target0034_archived_chunked.py
           qualification/phase3/test_phase3_gate2_static.py
       - name: Fetch immutable main baseline
         shell: bash
@@ -49,7 +52,7 @@ jobs:
       - name: Static Depth/K and selector firewall
         run: python qualification/phase3/test_phase3_gate2_static.py
       - name: Archived target0034 exact production equivalence
-        run: python qualification/phase3/test_candidate_b_target0034_archived.py --out target0034_archived_result.json
+        run: python qualification/phase3/test_candidate_b_target0034_archived_chunked.py --out target0034_archived_result.json
       - uses: actions/upload-artifact@v4
         with:
           name: target0034-archived-${{ matrix.os }}
