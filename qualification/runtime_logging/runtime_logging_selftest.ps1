@@ -12,7 +12,7 @@ function Assert-True([bool]$Condition, [string]$Message) {
 
 function Invoke-WrapperChild([string[]]$Arguments) {
     $hostExe = [System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName
-    & $hostExe -NoProfile -ExecutionPolicy Bypass -File $wrapper @Arguments
+    & $hostExe -NoProfile -ExecutionPolicy Bypass -File $wrapper @Arguments | Out-Host
     return [int]$LASTEXITCODE
 }
 
