@@ -1,0 +1,39 @@
+name: Phase3 Runtime Logging Contract
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'TOOLS/PCSRuntimeLogging.psm1'
+      - 'TOOLS/Invoke-PCSDriveLoggedCommand.ps1'
+      - 'qualification/runtime_logging/**'
+      - '.github/workflows/phase3-runtime-logging.yml'
+  pull_request:
+    paths:
+      - 'TOOLS/PCSRuntimeLogging.psm1'
+      - 'TOOLS/Invoke-PCSDriveLoggedCommand.ps1'
+      - 'qualification/runtime_logging/**'
+      - '.github/workflows/phase3-runtime-logging.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  windows-powershell-51:
+    name: Windows PowerShell 5.1 logging selftest
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run logging selftest
+        shell: cmd
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File qualification\runtime_logging\runtime_logging_selftest.ps1
+
+  powershell-7:
+    name: PowerShell 7 logging selftest
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run logging selftest
+        shell: pwsh
+        run: ./qualification/runtime_logging/runtime_logging_selftest.ps1
