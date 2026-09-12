@@ -1,0 +1,31 @@
+name: Phase3 Candidate B Production Surface Hash
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - 'qualification/phase3/candidate_b_production_surface_hash.py'
+      - '.github/workflows/phase3-candidate-b-production-surface-hash.yml'
+  pull_request:
+    paths:
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - 'qualification/phase3/candidate_b_production_surface_hash.py'
+      - '.github/workflows/phase3-candidate-b-production-surface-hash.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  production-surface-hash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Hash frozen Candidate-B production surface
+        run: python qualification/phase3/candidate_b_production_surface_hash.py
