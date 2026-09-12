@@ -1,0 +1,42 @@
+name: G101 V4 Windows Runtime Preflight
+
+on:
+  push:
+    branches:
+      - test/g101-v4-windows-runtime-preflight
+    paths:
+      - 'qualification/g101_v4/**'
+      - '.github/workflows/g101-v4-windows-runtime-preflight.yml'
+  pull_request:
+    paths:
+      - 'qualification/g101_v4/**'
+      - '.github/workflows/g101-v4-windows-runtime-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  windows-powershell-51:
+    name: Windows PowerShell 5.1
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse and runtime-probe V4 compatibility paths
+        shell: cmd
+        run: >-
+          powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+          qualification\g101_v4\github_runtime_probe.ps1
+          -CollectorPath qualification\g101_v4\COLLECT_PHASE2_LOCAL_FIXTURES.ps1
+          -LauncherPath qualification\g101_v4\RUN_PHASE2_LOCAL_FIXTURE_COLLECTOR_V4.bat
+
+  powershell-7:
+    name: PowerShell 7
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse and runtime-probe V4 compatibility paths
+        shell: pwsh
+        run: >-
+          ./qualification/g101_v4/github_runtime_probe.ps1
+          -CollectorPath ./qualification/g101_v4/COLLECT_PHASE2_LOCAL_FIXTURES.ps1
+          -LauncherPath ./qualification/g101_v4/RUN_PHASE2_LOCAL_FIXTURE_COLLECTOR_V4.bat
