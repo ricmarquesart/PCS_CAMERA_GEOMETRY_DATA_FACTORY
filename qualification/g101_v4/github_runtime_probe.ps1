@@ -43,8 +43,19 @@ foreach ($phase in @('SOURCE_VALIDATE','LEDGER_BIND','BINDING_VALIDATE','STAGE_P
     $phaseNeedle = '$Phase = ''' + $phase + ''''
     Assert-True ($collector.Contains($phaseNeedle)) ("missing phase marker: " + $phase)
 }
-Assert-True ($launcher.Contains('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0COLLECT_PHASE2_LOCAL_FIXTURES.ps1"')) 'launcher does not target the bundled collector exactly'
-Assert-True (-not ($launcher -match '(?i)\.py\b|blender\.exe|maya\.exe|df_g101_scale1k|run_df_g101')) 'launcher contains a forbidden executable path/token'
+$expectedLauncherInvocation = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0COLLECT_PHASE2_LOCAL_FIXTURES.ps1"'
+Assert-True ($launcher.Contains($expectedLauncherInvocation)) 'launcher does not target the bundled collector exactly'
+$invocationLikeLines = @(
+    $launcher -split "`r?`n" |
+        ForEach-Object { $_.Trim() } |
+        Where-Object {
+            $_ -and
+            $_ -notmatch '^(?i)@?echo\b' -and
+            $_ -match '(?i)(powershell(?:\.exe)?|pwsh(?:\.exe)?|python(?:\.exe)?|blender(?:\.exe)?|maya(?:\.exe)?|\.py\b|\.ps1\b|\.bat\b)'
+        }
+)
+Assert-True ($invocationLikeLines.Count -eq 1) ('launcher has unexpected executable/script invocation line(s): ' + ($invocationLikeLines -join ' || '))
+Assert-True ($invocationLikeLines[0] -eq $expectedLauncherInvocation) ('launcher invocation differs from frozen bundled collector call: ' + $invocationLikeLines[0])
 Write-Host 'PASS: frozen V4 static compatibility contract is present.'
 
 # 3) Exercise the exact object/materialization mechanisms that replaced the V3 binder path.
