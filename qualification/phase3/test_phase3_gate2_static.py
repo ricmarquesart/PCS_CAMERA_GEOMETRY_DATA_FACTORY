@@ -61,7 +61,12 @@ def call_names(node):
 def run():
     current=SOURCE.read_text(encoding='utf-8')
     try:
-        baseline=subprocess.check_output(['git','show','origin/main:SOURCE/pcs_factory_micro100_gt.py'],cwd=REPO,text=True)
+        baseline=subprocess.check_output(
+            ['git','show','origin/main:SOURCE/pcs_factory_micro100_gt.py'],
+            cwd=REPO,
+            text=True,
+            encoding='utf-8',
+        )
     except subprocess.CalledProcessError as exc:
         raise AssertionError('GATE2_BASELINE_MAIN_UNAVAILABLE') from exc
     cur_tree=parse(current); base_tree=parse(baseline); cur=fn_map(cur_tree); base=fn_map(base_tree)
