@@ -1,0 +1,76 @@
+name: Phase3 Candidate B Gate B V1C Archived 0000-0033
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - 'qualification/phase3/test_candidate_b_gateb_v1c.py'
+      - 'qualification/phase3/fixtures/gateb_v1c/**'
+      - 'qualification/phase3/test_phase3_gate2_static.py'
+      - '.github/workflows/phase3-candidate-b-gateb-v1c.yml'
+  pull_request:
+    paths:
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - 'qualification/phase3/test_candidate_b_gateb_v1c.py'
+      - 'qualification/phase3/fixtures/gateb_v1c/**'
+      - 'qualification/phase3/test_phase3_gate2_static.py'
+      - '.github/workflows/phase3-candidate-b-gateb-v1c.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  archived-g101-0000-0033:
+    name: Gate B V1C archived G101 0000-0033 (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numeric dependency
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Fetch immutable main baseline
+        run: git fetch origin main --quiet
+      - name: Compile production and Gate-B qualification
+        run: >-
+          python -m py_compile
+          SOURCE/pcs_factory_micro100_gt.py
+          qualification/phase3/test_phase3_gate2_static.py
+          qualification/phase3/test_candidate_b_gateb_v1c.py
+      - name: Reconfirm static Depth/K selector firewall
+        run: python qualification/phase3/test_phase3_gate2_static.py
+      - name: Run archived Gate-B V1C 0000-0033 exact qualification
+        run: python qualification/phase3/test_candidate_b_gateb_v1c.py gateb_v1c_result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gateb-v1c-result-${{ matrix.os }}
+          path: gateb_v1c_result.json
+          if-no-files-found: error
+          retention-days: 30
+
+  qualified-head:
+    name: Gate B V1C qualified committed head
+    needs: archived-g101-0000-0033
+    if: needs.archived-g101-0000-0033.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+      - name: Record Gate-B qualified head
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "GATE_B_QUALIFIED_HEAD=$(git rev-parse HEAD)"
+          echo 'PHASE3_GATE_B_V1C_ARCHIVED_G101_0000_0033=PASS'

@@ -1,0 +1,102 @@
+name: Phase3 Candidate B Gate B V1G Archived 0000-0033
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - 'qualification/phase3/test_candidate_b_gateb_v1g.py'
+      - 'qualification/phase3/fixtures/g101_gateb_v1g/**'
+      - 'qualification/phase3/fixtures/g101_gateb_v1i/**'
+      - 'qualification/phase3/test_phase3_gate2_static.py'
+      - '.github/workflows/phase3-candidate-b-gateb-v1g.yml'
+  pull_request:
+    paths:
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - 'qualification/phase3/test_candidate_b_gateb_v1g.py'
+      - 'qualification/phase3/fixtures/g101_gateb_v1g/**'
+      - 'qualification/phase3/fixtures/g101_gateb_v1i/**'
+      - 'qualification/phase3/test_phase3_gate2_static.py'
+      - '.github/workflows/phase3-candidate-b-gateb-v1g.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  archived-g101-0000-0033:
+    name: Gate B V1G archived G101 0000-0033
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numeric dependency
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Fetch immutable main baseline
+        run: git fetch origin main --quiet
+      - name: Compile production and Gate-B qualification
+        run: python -m py_compile SOURCE/pcs_factory_micro100_gt.py qualification/phase3/test_phase3_gate2_static.py qualification/phase3/test_candidate_b_gateb_v1g.py
+      - name: Reconfirm static Depth/K selector firewall
+        run: python qualification/phase3/test_phase3_gate2_static.py
+      - name: Diagnose V1G transport against committed V1I overlap
+        shell: python
+        run: |
+          from pathlib import Path
+          import base64, hashlib, json, lzma
+          g = Path('qualification/phase3/fixtures/g101_gateb_v1g')
+          i = Path('qualification/phase3/fixtures/g101_gateb_v1i')
+          v1g = b''.join((g / f'part{n:02d}.b64').read_bytes() for n in range(1, 5))
+          parts = sorted(i.glob('part*.b64'))
+          v1i = b''.join(p.read_bytes() for p in parts)
+          overlap = min(len(v1g), len(v1i))
+          diffs = [(n, v1g[n], v1i[n]) for n in range(overlap) if v1g[n] != v1i[n]]
+          print('V1G_LEN', len(v1g), 'V1G_SHA256', hashlib.sha256(v1g).hexdigest())
+          print('V1I_PARTS', len(parts), 'V1I_LEN', len(v1i), 'V1I_OVERLAP_SHA256', hashlib.sha256(v1i[:overlap]).hexdigest())
+          print('OVERLAP', overlap, 'DIFF_COUNT', len(diffs), 'FIRST_DIFFS', diffs[:32])
+          for n in range(1, 5):
+              b = (g / f'part{n:02d}.b64').read_bytes()
+              print(f'V1G_PART{n:02d}', len(b), hashlib.sha256(b).hexdigest())
+          try:
+              xb = base64.b64decode(v1g, validate=True)
+              print('CURRENT_XZ_LEN', len(xb), 'CURRENT_XZ_SHA256', hashlib.sha256(xb).hexdigest())
+              raw = lzma.decompress(xb, format=lzma.FORMAT_XZ)
+              print('CURRENT_JSON_LEN', len(raw), 'CURRENT_JSON_SHA256', hashlib.sha256(raw).hexdigest())
+              cap = json.loads(raw)
+              print('CURRENT_SCHEMA', cap.get('schema'), 'CURRENT_SAMPLE_COUNT', len(cap.get('samples', [])))
+              print('CURRENT_AUTHORITY', json.dumps(cap.get('authority', {}), sort_keys=True))
+          except Exception as exc:
+              print('CURRENT_DECODE_FAILURE', type(exc).__name__, repr(str(exc)))
+      - name: Run archived Gate-B V1G 0000-0033 exact qualification
+        run: python qualification/phase3/test_candidate_b_gateb_v1g.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gateb-v1g-result-${{ matrix.os }}
+          path: gateb_v1g_result.json
+          if-no-files-found: error
+          retention-days: 30
+
+  qualified-head:
+    name: Gate B V1G qualified committed head
+    needs: archived-g101-0000-0033
+    if: needs.archived-g101-0000-0033.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+      - name: Record Gate-B qualified head
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "GATE_B_QUALIFIED_HEAD=$(git rev-parse HEAD)"
+          echo 'PHASE3_GATE_B_V1G_ARCHIVED_G101_0000_0033=PASS'

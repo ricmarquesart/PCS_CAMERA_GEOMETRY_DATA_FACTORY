@@ -1,0 +1,37 @@
+name: Phase3 Candidate B Reference
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'qualification/phase3/**'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-reference.yml'
+  pull_request:
+    paths:
+      - 'qualification/phase3/**'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-reference.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  candidate-b-reference:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numeric dependency
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Compile frozen reference and production baseline
+        run: python -m py_compile qualification/phase3/candidate_b_reference.py SOURCE/pcs_factory_micro100_gt.py
+      - name: Run focused Candidate B semantic tests
+        run: python qualification/phase3/test_candidate_b_reference.py

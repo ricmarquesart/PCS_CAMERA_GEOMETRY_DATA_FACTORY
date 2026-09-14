@@ -1,0 +1,37 @@
+{
+  "aggregate": {
+    "expected_exclusions": 0,
+    "expected_new_safe_pixels": 7066304,
+    "old_mask_digest_sha256": "4a31f4df0b059d22c29bb61f93f24059aec4c7f90dcc43b09f4591916e733383",
+    "old_safe_pixels": 7066304,
+    "rendered_oid_samples": [
+      3,
+      27,
+      39,
+      51,
+      63,
+      75,
+      87,
+      99
+    ],
+    "sample_count": 100,
+    "sample_id_digest_sha256": "6d3b047de7ce2cdbdf50e99c0a315eb737be3b7942c6fb0e558d1535fb7b46d3"
+  },
+  "base64_bytes": 125888,
+  "base64_sha256": "b007be866d433670bbc6ad0c20fd0aa9f2d4df2d7cb7e336478469b6e02ceaa4",
+  "json_bytes": 588689,
+  "json_sha256": "0ab266c1a0bc585934be2b172be531832841e9abbdcb0c51ae90f65c21079088",
+  "schema": "DF-G101-PHASE3-GATE-C-MICRO100-MINIMAL-HYBRID-OID-MANIFEST-V2",
+  "source_authority": {
+    "bytes": 64151371,
+    "closure_drive_id": "1a63qacKbvG_OKUwGzPCoBXIk5WxmZiauKBXQiBstNJs",
+    "drive_id": "12VDhJRmvu105VHRplr2I2LtGeGwVcQdV",
+    "filename": "PCS_CAMERA_GEOMETRY_DATA_FACTORY_G100_MICRO100_V2_RETURN_20260909_R36.zip",
+    "return_manifest_bytes": 48338,
+    "return_manifest_sha256": "c9a32fc848b7083bb3224d52554dae0554dcefc899505e40fdde07f99b5d4a3f",
+    "sha256": "f94476c926bb7ba6e13e5122031dc25649e1f8277d4440bb0471ce946e57dee6",
+    "zip_entries": 235
+  },
+  "xz_bytes": 94416,
+  "xz_sha256": "8c5c7a773ecfdc338db4683a9beb210f72bd7e02d377fb2abb465f65f7fb0c7f"
+}

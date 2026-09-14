@@ -1,0 +1,77 @@
+name: Phase3 Candidate B Target0034 Archived Equivalence
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'qualification/phase3/test_candidate_b_target0034_archived.py'
+      - 'qualification/phase3/test_candidate_b_target0034_archived_chunked.py'
+      - 'qualification/phase3/fixtures/g101_target0034_capsule_v1.part*'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-target0034-archived.yml'
+  pull_request:
+    paths:
+      - 'qualification/phase3/test_candidate_b_target0034_archived.py'
+      - 'qualification/phase3/test_candidate_b_target0034_archived_chunked.py'
+      - 'qualification/phase3/fixtures/g101_target0034_capsule_v1.part*'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-target0034-archived.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  archived-target0034:
+    name: Archived target0034 production equivalence (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Compile production and archived-fixture gate
+        run: >-
+          python -m py_compile
+          SOURCE/pcs_factory_micro100_gt.py
+          qualification/phase3/test_candidate_b_target0034_archived.py
+          qualification/phase3/test_candidate_b_target0034_archived_chunked.py
+          qualification/phase3/test_phase3_gate2_static.py
+      - name: Fetch immutable main baseline
+        shell: bash
+        run: git fetch origin main --quiet
+      - name: Static Depth/K and selector firewall
+        run: python qualification/phase3/test_phase3_gate2_static.py
+      - name: Archived target0034 exact production equivalence
+        run: python qualification/phase3/test_candidate_b_target0034_archived_chunked.py --out target0034_archived_result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: target0034-archived-${{ matrix.os }}
+          path: target0034_archived_result.json
+          if-no-files-found: error
+          retention-days: 30
+
+  qualified-head:
+    name: Archived target0034 qualified committed head
+    needs: archived-target0034
+    if: needs.archived-target0034.result == 'success'
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+      - name: Record archived real-fixture qualified head
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "TARGET0034_QUALIFIED_HEAD=$(git rev-parse HEAD)"
+          echo 'PHASE3_TARGET0034_ARCHIVED_PRODUCTION_EQUIVALENCE=PASS'

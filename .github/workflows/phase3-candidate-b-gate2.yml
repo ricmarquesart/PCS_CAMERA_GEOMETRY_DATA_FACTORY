@@ -1,0 +1,192 @@
+name: Phase3 Candidate B Gate2 Production
+
+on:
+  push:
+    branches:
+      - phase3/g101-candidate-b-drive-logging
+    paths:
+      - 'qualification/phase3/**'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-gate2.yml'
+  pull_request:
+    paths:
+      - 'qualification/phase3/**'
+      - 'SOURCE/pcs_factory_micro100_gt.py'
+      - '.github/workflows/phase3-candidate-b-gate2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize-production:
+    name: Governed production materialization
+    runs-on: ubuntu-latest
+    outputs:
+      committed: ${{ steps.commit.outputs.committed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Apply idempotent Gate 2 production patch
+        run: python qualification/phase3/apply_gate2_production_patch.py
+      - name: Compile patched production and qualification code
+        run: >-
+          python -m py_compile
+          SOURCE/pcs_factory_micro100_gt.py
+          qualification/phase3/apply_gate2_production_patch.py
+          qualification/phase3/test_candidate_b_gate2_production.py
+          qualification/phase3/test_candidate_b_gate2_negative.py
+          qualification/phase3/test_phase3_gate2_static.py
+          qualification/phase3/run_candidate_b_gate2_matrix.py
+      - name: Static Depth/K isolation before commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --quiet
+          python qualification/phase3/test_phase3_gate2_static.py
+          git diff --check
+      - id: commit
+        name: Commit governed production source mutation when needed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- SOURCE/pcs_factory_micro100_gt.py; then
+            echo 'committed=false' >> "$GITHUB_OUTPUT"
+            echo 'Gate 2 production source already materialized.'
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add SOURCE/pcs_factory_micro100_gt.py
+            git commit -m 'Phase3 Gate2: integrate Candidate B Normal-safe production path'
+            git push origin HEAD:phase3/g101-candidate-b-drive-logging
+            echo 'committed=true' >> "$GITHUB_OUTPUT"
+            echo 'Production source committed; the follow-up push run will qualify the committed head.'
+          fi
+
+  anchors:
+    name: Production/direct anchors (${{ matrix.os }})
+    needs: materialize-production
+    if: needs.materialize-production.outputs.committed == 'false'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Compile production and Gate 2 qualification
+        run: >-
+          python -m py_compile
+          SOURCE/pcs_factory_micro100_gt.py
+          qualification/phase3/candidate_b_reference.py
+          qualification/phase3/candidate_b_optimized.py
+          qualification/phase3/candidate_b_direct_oracle.py
+          qualification/phase3/synthetic_cases.py
+          qualification/phase3/test_candidate_b_gate2_production.py
+          qualification/phase3/test_candidate_b_gate2_negative.py
+          qualification/phase3/test_phase3_gate2_static.py
+      - name: Fetch main baseline
+        shell: bash
+        run: git fetch origin main --quiet
+      - name: Static source/Depth/K firewall
+        run: python qualification/phase3/test_phase3_gate2_static.py
+      - name: Existing Phase 3 firewall regression
+        run: python qualification/phase3/test_phase3_static_firewall.py
+      - name: Production-vs-reference frozen anchors
+        run: python qualification/phase3/test_candidate_b_gate2_production.py
+      - name: Fail-closed and Normal authority negatives
+        run: python qualification/phase3/test_candidate_b_gate2_negative.py
+      - name: Source-scope audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          bad=0
+          while IFS= read -r p; do
+            case "$p" in
+              SOURCE/pcs_factory_micro100_gt.py|qualification/phase3/*|qualification/runtime_logging/*|TOOLS/*|.github/workflows/*) ;;
+              *) echo "UNAUTHORIZED_PHASE3_PATH: $p"; bad=1 ;;
+            esac
+          done < <(git diff --name-only origin/main...HEAD)
+          test "$bad" -eq 0
+
+  matrix:
+    name: Gate2 ${{ matrix.suite }} / ${{ matrix.orientation }} / ${{ matrix.mode }}
+    needs: materialize-production
+    if: needs.materialize-production.outputs.committed == 'false'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [standard, ultrathin, phase]
+        orientation: [VERTICAL, DIAGONAL, HORIZONTAL]
+        mode: [visible, occluded]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Production vs literal direct Candidate B matrix shard
+        run: python qualification/phase3/run_candidate_b_gate2_matrix.py --suite "${{ matrix.suite }}" --orientation "${{ matrix.orientation }}" --mode "${{ matrix.mode }}" --out gate2_matrix_result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gate2-${{ matrix.suite }}-${{ matrix.orientation }}-${{ matrix.mode }}
+          path: gate2_matrix_result.json
+          if-no-files-found: error
+          retention-days: 14
+
+  specials:
+    name: Gate2 special direct controls
+    needs: materialize-production
+    if: needs.materialize-production.outputs.committed == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy
+        run: python -m pip install --disable-pip-version-check numpy
+      - name: Production vs literal direct special controls
+        run: python qualification/phase3/run_candidate_b_gate2_matrix.py --suite special --out gate2_special_result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gate2-special-controls
+          path: gate2_special_result.json
+          if-no-files-found: error
+          retention-days: 14
+
+  qualified-head:
+    name: Gate2 qualified committed head
+    needs: [materialize-production, anchors, matrix, specials]
+    if: always() && needs.materialize-production.outputs.committed == 'false' && needs.anchors.result == 'success' && needs.matrix.result == 'success' && needs.specials.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase3/g101-candidate-b-drive-logging
+      - name: Record qualified head
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "GATE2_QUALIFIED_HEAD=$(git rev-parse HEAD)"
+          echo 'PHASE3_GATE2_PRODUCTION_GITHUB=PASS'
