@@ -1,0 +1,43 @@
+{
+  "aggregate": {
+    "expected_exclusions": 0,
+    "expected_new_safe_pixels": 7066304,
+    "old_mask_digest_sha256": "4a31f4df0b059d22c29bb61f93f24059aec4c7f90dcc43b09f4591916e733383",
+    "old_safe_pixels": 7066304,
+    "rendered_oid_samples": [3,27,39,51,63,75,87,99],
+    "sample_count": 100,
+    "sample_id_digest_sha256": "6d3b047de7ce2cdbdf50e99c0a315eb737be3b7942c6fb0e558d1535fb7b46d3"
+  },
+  "base64_bytes": 103056,
+  "base64_sha256": "28a15d6df6534e5e8c56ebdd686b5ad0c8620da8fbcb14542f3106db54bbd7e9",
+  "json_bytes": 493271,
+  "json_sha256": "4838e81a1876cca9042a9b5e44e2cc2e4dd8dc39d111c5aaf1055cf25745d5d3",
+  "parts": [
+    {"bytes":8000,"name":"part01.b64","sha256":"c7f97d64a2d8563ba839a2af38699293032b23920f3a5b35ebf1853f97647654"},
+    {"bytes":8000,"name":"part02.b64","sha256":"15067501e294b15be4788128e50d0f92cb2971dba01a02e14dc388bfb2092e22"},
+    {"bytes":8000,"name":"part03.b64","sha256":"480fbfcd408f9850e83f11fb86f2d751335451141673aa82a7922f6662f40d88"},
+    {"bytes":8000,"name":"part04.b64","sha256":"71b545cc69fe3f9c2d6d7301023386b073a8d35d162e7e1d9d76bab12efe9353"},
+    {"bytes":8000,"name":"part05.b64","sha256":"7a959021d17b529b4cae83e946b637b0374bf8b18bc40149c406a7e575fea2cc"},
+    {"bytes":8000,"name":"part06.b64","sha256":"a03949bf8a3b83f7be84816b10c71aeba092310743ddc0efd217523dd661022a"},
+    {"bytes":8000,"name":"part07.b64","sha256":"89b688b3a429498f7f8d608f3b0805038214129276145b9a6021f43ec3c197ba"},
+    {"bytes":8000,"name":"part08.b64","sha256":"f1cdd6dd789a8343f0f7a48b20fe902591f0ae63e2fc6eb80695f1425d4c7cb0"},
+    {"bytes":8000,"name":"part09.b64","sha256":"2b1215ffa8a5b1247611c1ee75c39f5233174d0b42d0ceec2af9314ac89382a9"},
+    {"bytes":8000,"name":"part10.b64","sha256":"887d391c626a5bea2ba7b6ac0198f9e1e01531e5c7b45c669a941e366f7829df"},
+    {"bytes":8000,"name":"part11.b64","sha256":"2f72de42a849634709e8eea900448d06e6c66eb33df8f349182faa37c21e0969"},
+    {"bytes":8000,"name":"part12.b64","sha256":"bda67c4b97ac371dc06efc6515c3a41dfae84cd4049bf9c4a77a11983417c003"},
+    {"bytes":7056,"name":"part13.b64","sha256":"1094cf9b392d9e75dbb4898a4bf805fd21619ecf2649a4bb10f288ce2eba946c"}
+  ],
+  "schema": "DF-G101-PHASE3-GATE-C-MICRO100-MINIMAL-HYBRID-OID-MANIFEST-V1",
+  "source_authority": {
+    "bytes": 64151371,
+    "closure_drive_id": "1a63qacKbvG_OKUwGzPCoBXIk5WxmZiauKBXQiBstNJs",
+    "drive_id": "12VDhJRmvu105VHRplr2I2LtGeGwVcQdV",
+    "filename": "PCS_CAMERA_GEOMETRY_DATA_FACTORY_G100_MICRO100_V2_RETURN_20260909_R36.zip",
+    "return_manifest_bytes": 48338,
+    "return_manifest_sha256": "c9a32fc848b7083bb3224d52554dae0554dcefc899505e40fdde07f99b5d4a3f",
+    "sha256": "f94476c926bb7ba6e13e5122031dc25649e1f8277d4440bb0471ce946e57dee6",
+    "zip_entries": 235
+  },
+  "xz_bytes": 77292,
+  "xz_sha256": "64a8b870c6b76af710cab904e7558370a7225d405762707d936cc236ddeead4f"
+}
